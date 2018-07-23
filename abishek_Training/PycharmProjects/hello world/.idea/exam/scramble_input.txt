@@ -1,0 +1,1 @@
+Scrambling words is very interesting . Becasuse even if they are scrambled , it doesn't impact our reading . if you don't believ it , scramble this file and read again . Sounds surprising , isn't . Because we don't read letters letter by letter, we read the words as a whole .

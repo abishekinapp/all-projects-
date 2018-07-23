@@ -1,0 +1,309 @@
+create table User(
+	User_id 	varchar(10),
+	User_name 	varchar(20),
+	Email_id 	varchar(30),
+	System_id 	varchar(10),
+	primary key(User_id));
+
+create table Picture(
+	User_id varchar(10),
+	Pic_id  varchar(20),
+	Date_pic Date,
+	Tags 	ENUM('Art','Science','Music','History','Engineering'),
+	Caption varchar(20),
+	primary key (Pic_id),
+	foreign key (User_id) references User(User_id) );
+
+alter table Picture add Tag_Art boolean after Date_pic;
+alter table Picture add Tag_Science boolean after Date_pic;
+alter table Picture add Tag_Music boolean after Date_pic;
+alter table Picture add Tag_History boolean after Date_pic;
+alter table Picture addTag_Engineering boolean after Date_pic;
+
+
+Update Picture Set Tag_Science = true WHERE Pic_id = P11;
+
+
+
+create table Likes(
+	User_id  varchar(20),
+	Pic_id  varchar(20),
+	foreign key(User_id) references User(User_id),
+	foreign key(Pic_id) references Pictures(Pic_id));
+	
+	
+insert into User(User_id,User_name,Email_id,System_id) values
+('01','Abishek','abishek@inapp.com','sys-1'),
+('02','Alan','alan@inapp.com','sys-2'),
+('03','Madav','madav@inapp.com','sys-3')
+('04','supriya','supriya@inapp.com','sys-4')
+
+
+		
+insert into Picture(User_id,Pic_id,Date_pic,Tag_Art,Tag_Science,Tag_Music,Tag_History,Tag_Engineering,Caption) values
+('01','P11','2001-1-1',true,false,false,false,false,'no caption'),
+('01','P12','2001-1-2',true,true,true,false,true,'rocket'),
+('02','P21','2001-1-4',true,false,false,false,false,'abstract'),
+('02','P22','2001-1-5',false,false,false,false,true,'no caption'),
+('03','P31','2001-1-6',false,true,false,false,false,'London'),
+('04','P41','2001-1-7',true,true,false,false,false,'London');
+
+
+
+insert into Likes (User_id,Pic_id) values
+('01','P11'),
+('01','P12'),
+('01','P21'),
+('02','P11'),
+('02','P22'),
+('02','P31'),
+('03','P11'),
+('04','P11'),
+('04','P41');
+
++---------+------------+-----------+-------------------+-----------+
+| User_id | First_name | Last_name | Email_id          | System_id |
++---------+------------+-----------+-------------------+-----------+
+| 01      | Abishek    | V         | abishek@gmail.com | sys-1     |
+| 02      | Alan       | baby      | alan@inapp.com    | sys-2     |
+| 03      | Madav      | manohar   | madav@yahoo.com   | sys-3     |
+| 04      | Supriya    | P         | supriya@inapp.com | sys-4     |
+| 05      | liz        | Mary      | Liz@inapp.com     | sys-5     |
+| 06      | kavya      | k         | kavya@inapp.com   | sys-6     |
+| 07      | Sruthi     | S         | Sruthi@inapp.com  | sys-7     |
++---------+------------+-----------+-------------------+-----------+
+
++---------+--------+
+| User_id | Pic_id |
++---------+--------+
+| 01      | P11    |
+| 01      | P12    |
+| 01      | P21    |
+| 02      | P11    |
+| 02      | P22    |
+| 02      | P31    |
+| 03      | P11    |
+| 04      | P11    |
+| 04      | P41    |
+| 01      | P31    |
++---------+--------+
+
+
+IFNULL(tableA.Name,'Name not assigned')
+
+1)Display Picture ids of pictures posted by user id "1"
+
+	mysql> select Pic_id from Picture where User_id = 01;
+
++--------+
+| Pic_id |
++--------+
+| P11    |
+| P12    |
++--------+
+
+
+2)Display captions of pictures posted by "2". Display 'No caption' if caption is not having any value.
+	
+	mysql> select if(Picture.Caption IS NULL || Picture.Caption=' ','No Caption',Picture.Caption) as Caption from Picture where User_id = '02';
++------------+
+| Caption    |
++------------+
+| abstract   |
+| No Caption |
++------------+
+
+
+
+3)Which pictures (picture ids) and by which users (user ids) have been posted in last 1 year?
+	
+	mysql> select * from Picture where Date_pic >= curdate() - interval 1 year;
+
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+| User_id | Pic_id | Date_pic   | Tag_Art | Tag_Science | Tag_Music | Tag_History | Tag_Engineering | Caption |
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+| 01      | P11    | 2018-01-01 |       1 |           1 |         0 |           0 |               0 | NULL    |
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+
+
+
+
+4)Which picture/s (picture ids) has received maximum likes?
+	
+mysql> select Pic_id  from Likes Group by Pic_id order by count(Pic_id) desc limit 1;
++--------+
+| Pic_id |
++--------+
+| P11    |
++--------+
+
+
+5)Display all picture ids in descending order of the likes they have got. Also display total no of likes each picture has received.
+	
+	mysql> select Pic_id,count(Pic_id) as Like_count from Likes Group by Pic_id order by count(Pic_id) desc;
++--------+------------+
+| Pic_id | Like_count |
++--------+------------+
+| P11    |          4 |
+| P31    |          2 |
+| P22    |          1 |
+| P41    |          1 |
+| P12    |          1 |
+| P21    |          1 |
++--------+------------+
+
+
+
+6)Display picture ids of pictures with more than 3 likes.
+	
+
+	mysql> select Pic_id from Likes group by Pic_id having Count(Pic_id)>=3; 
++--------+
+| Pic_id |
++--------+
+| P11    |
++--------+
+
+
+
+7)Who (user id) has liked the most pictures?
+	
+	mysql> select User_id from Likes group by User_id order by count(User_id) desc limit 1;
++---------+
+| User_id |
++---------+
+| 01      |
++---------+
+
+
+8)Find pictures (picture ids) with more than 3 tags.
+	
+
+	mysql> select Pic_id from Picture where CONCAT(Tag_Art,Tag_music,Tag_Science,Tag_History,Tag_Engineering) like "%1%1%1%";
++--------+
+| Pic_id |
++--------+
+| P12    |
++--------+
+
+
+9)Display pictures with "London" in their caption. Do case insensitive search.
+	mysql> select * from Picture where Caption like "%london%";
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+| User_id | Pic_id | Date_pic   | Tag_Art | Tag_Science | Tag_Music | Tag_History | Tag_Engineering | Caption |
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+| 03      | P31    | 2014-01-01 |       0 |           1 |         0 |           0 |               0 | London  |
++---------+--------+------------+---------+-------------+-----------+-------------+-----------------+---------+
+
+
+
+
+
+10)Display year, pic_id of pictures posted by User id “3” in last 5 years.
+
+	mysql>  select Pic_id,Date_pic from Picture where Date_pic >= curdate() - interval 5 year and User_id="03";
++--------+------------+
+| Pic_id | Date_pic   |
++--------+------------+
+| P31    | 2014-01-01 |
++--------+------------+
+
+
+11)Display first and last names of all users who have either have an account on gmail or yahoo.
+
+	mysql> select First_name ,Last_name from User where Email_id like "%yahoo%" or Email_id like "%gmail%";
++------------+-----------+
+| First_name | Last_name |
++------------+-----------+
+| Abishek    | V         |
+| Madav      | manohar   |
++------------+-----------+
+
+12)Add new user with user-name, his first & last name and email.
+
+	mysql> insert into User(User_id,First_name,Last_name,Email_id,System_Id) values ("09","Sangeeta","S","Sangeetha@inapp.com","sys-8");
+	mysql> select * from User;
++---------+------------+-----------+---------------------+-----------+
+| User_id | First_name | Last_name | Email_id            | System_id |
++---------+------------+-----------+---------------------+-----------+
+| 01      | Abishek    | V         | abishek@gmail.com   | sys-1     |
+| 02      | Alan       | baby      | alan@inapp.com      | sys-2     |
+| 03      | Madav      | manohar   | madav@yahoo.com     | sys-3     |
+| 04      | Supriya    | P         | supriya@inapp.com   | sys-4     |
+| 05      | liz        | Mary      | Liz@inapp.com       | sys-5     |
+| 06      | kavya      | k         | kavya@inapp.com     | sys-6     |
+| 07      | Sruthi     | S         | Sruthi@inapp.com    | sys-7     |
+| 09      | Sangeeta   | S         | Sangeetha@inapp.com | sys-8     |
++---------+------------+-----------+---------------------+-----------+
+
+
+13)Add a like for Picture id 6 by user id “7”.
+
+	mysql>insert into Likes (User_id,Pic_id) values ("07","P61");
++---------+--------+
+| User_id | Pic_id |
++---------+--------+
+| 01      | P11    |
+| 01      | P12    |
+| 01      | P21    |
+| 02      | P11    |
+| 02      | P22    |
+| 02      | P31    |
+| 03      | P11    |
+| 04      | P11    |
+| 04      | P41    |
+| 01      | P31    |
+| 07      | P61    |
++---------+--------+
+
+
+14)Delete all likes done by user id “3”.
+
+	mysql>delete from Likes where User_id="03";
++---------+--------+
+| User_id | Pic_id |
++---------+--------+
+| 01      | P11    |
+| 01      | P12    |
+| 01      | P21    |
+| 02      | P11    |
+| 02      | P22    |
+| 02      | P31    |
+| 04      | P11    |
+| 04      | P41    |
+| 01      | P31    |
+| 07      | P61    |
++---------+--------+
+10 rows in set (0.00 sec)
+
+
+
+15)Update last name for user id “9” to 'Kumar'.
+	mysql> update User Set Last_name = "kumar" where User_id = "09";   
+
+
++---------+------------+-----------+---------------------+-----------+
+| User_id | First_name | Last_name | Email_id            | System_id |
++---------+------------+-----------+---------------------+-----------+
+| 01      | Abishek    | V         | abishek@gmail.com   | sys-1     |
+| 02      | Alan       | baby      | alan@inapp.com      | sys-2     |
+| 03      | Madav      | manohar   | madav@yahoo.com     | sys-3     |
+| 04      | Supriya    | P         | supriya@inapp.com   | sys-4     |
+| 05      | liz        | Mary      | Liz@inapp.com       | sys-5     |
+| 06      | kavya      | k         | kavya@inapp.com     | sys-6     |
+| 07      | Sruthi     | S         | Sruthi@inapp.com    | sys-7     |
+| 09      | Sangeeta   | kumar     | Sangeetha@inapp.com | sys-8     |
++---------+------------+-----------+---------------------+-----------+
+
+
+
+
+
+
+
+
+
+
+
+
+

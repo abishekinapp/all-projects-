@@ -1,0 +1,25 @@
+
+while option in [1,2,3,4]:
+    if option == 1:
+        acc= int(input ("enter the account number :"))
+        print("acoount holder name :" , name[acc])
+        dep_amount= int(input("enter the ammount to be deposited :"))
+        obj.deposit(dep_amount, acc)
+
+    elif option == 2:
+        acc= int(input ("enter the account number :"))
+        print("acoount holder name :" , name[acc])
+        draw_ammount =int(input("enter the ammount to be drawn :"))
+        obj.withdraw(draw_ammount, acc)
+
+    elif option == 3:
+        From_acc= int(input ("enter the account number from which ammout is to be transfered :"))
+        To_acc=int(input ("enter the account number to which ammout is to be transfered :"))
+        print("acoount name of the transferer:" , name[From_acc])
+        print("acoount name of the reciever:", name[To_acc])
+        obj.trans_ammount= int(input('enter the ammount to be transfered :'))
+
+    elif option == 4:
+        acc = int(input("enter the account number :"))
+        obj.veiw_bal(acc)
+
