@@ -1,9 +1,33 @@
 
 <html>
-  <head>>
-    <title></title>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+    {% load staticfiles %}
+    <link rel="stylesheet" href={% static 'accounts/style.css' %} type="text/css"
+    <title>login page</title>
+
+
   </head>
     <body>
-      dhfghfghfh
+
+      <h1>welcome</h1>
+      <button type="button" class="btn btn-outline-danger">Danger</button>
+      <div class="jumbotron">
+        <h1>hella</h1>
+        {% for i in number %}
+        <ul>{{ i }}</ul>
+        {% endfor %}
+
+        <h1>{{myname}}</h1>
+
+
+      </div>
+
+
+
+
     </body>
 </html>
