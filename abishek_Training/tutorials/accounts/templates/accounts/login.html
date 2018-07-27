@@ -1,33 +1,22 @@
-
-<html>
-  <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-
-    {% load staticfiles %}
-    <link rel="stylesheet" href={% static 'accounts/style.css' %} type="text/css"
-    <title>login page</title>
+{% extends 'base.html' %}
 
 
-  </head>
-    <body>
+{% block body  %}
 
-      <h1>welcome</h1>
-      <button type="button" class="btn btn-outline-danger">Danger</button>
-      <div class="jumbotron">
-        <h1>hella</h1>
-        {% for i in number %}
-        <ul>{{ i }}</ul>
-        {% endfor %}
+    <h1>Welcome to the blog</h1>
+    <h2>you can login here</h2>
 
-        <h1>{{myname}}</h1>
-
-
-      </div>
+    <form method="post">
 
 
 
+      {% csrf_token %}
+      {{ form.as_p }}
 
-    </body>
-</html>
+
+     <button type="submit" class="btn btn-outline-danger">login</a></button>
+
+    </form>
+
+
+{% endblock %}
